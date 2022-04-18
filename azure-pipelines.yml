@@ -11,7 +11,7 @@ stages:
   jobs:
   - job: 'build'
     pool:
-     VmImage: windows-latest
+     VmImage: ubuntu-latest
     variables:
      buildConfiguration: 'Release'
     steps:
@@ -35,4 +35,21 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
-
+        
+- stage: 'deploymentstage'
+  dependsOn: buildstage
+  jobs:
+  - job: "deployjob"
+    pool:
+     VmImage: ubuntu-latest
+    steps:
+    - download : current 
+      artifact: drop
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'myarmservice'
+        appType: 'webApp'
+        WebAppName: 'testweb-ap'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    
