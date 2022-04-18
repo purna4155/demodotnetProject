@@ -13,7 +13,7 @@ stages:
     pool:
      VmImage: windows-latest
     variables:
-    BuildConfiguration: 'Release'
+     buildConfiguration: 'Release'
     steps:
     - task: DotNetCoreCLI@2
       inputs:
