@@ -7,7 +7,7 @@ trigger:
 - none
 
 stages:
-- stage: 'build stage'
+- stage: 'buildstage'
   jobs:
   - job: 'build'
     pool:
