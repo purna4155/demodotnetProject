@@ -10,10 +10,10 @@ stages:
 - stage: 'build stage'
   jobs:
   - job: 'build'
-    variables:
-    BuildConfiguration: Release
     pool:
      VmImage: windows-latest
+    variables:
+    BuildConfiguration: 'Release'
     steps:
     - task: DotNetCoreCLI@2
       inputs:
