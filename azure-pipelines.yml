@@ -65,7 +65,7 @@ stages:
         - task: IISWebAppDeploymentOnMachineGroup@0
           inputs:
             WebSiteName: 'default website'
-            Package: '$(System.DefaultWorkingDirectory)\**\*.zip'
+            Package: '$(Pipeline.Workspace)/**/*.zip'
    
   
     
