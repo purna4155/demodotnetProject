@@ -39,16 +39,33 @@ stages:
 - stage: 'deploymentstage'
   dependsOn: buildstage
   jobs:
-  - job: "deployjob"
+  - deployment: 'deployjob'
     pool:
-     VmImage: ubuntu-latest
-    steps:
-    - download : current 
-      artifact: drop
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'myarmservice'
-        appType: 'webApp'
-        WebAppName: 'testweb-ap'
-        packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+     vmImage: 'windows-latest'
+    environment:
+     name: myiis
+     resourceType: VirtualMachine
+
+    strategy:
+     runOnce:
+      deploy:
+        steps:
+        - task: IISWebAppManagementOnMachineGroup@0
+          inputs:
+            EnableIIS: true
+            IISDeploymentType: 'IISWebsite'
+            ActionIISWebsite: 'CreateOrUpdateWebsite'
+            WebsiteName: 'default website'
+            WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+            WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+            AddBinding: true
+            Protocol: http
+            IPAddress: 'All Unassigned'
+            port: 80
+        - task: IISWebAppDeploymentOnMachineGroup@0
+          inputs:
+            WebSiteName: 'default website'
+            Package: '$(System.DefaultWorkingDirectory)\**\*.zip'
+   
+  
+    
