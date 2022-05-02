@@ -61,7 +61,7 @@ stages:
             AddBinding: true
             Protocol: http
             IPAddress: 'All Unassigned'
-            port: 80
+            port: 90
         - task: IISWebAppDeploymentOnMachineGroup@0
           inputs:
             WebSiteName: 'default website'
